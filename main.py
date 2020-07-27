@@ -1,7 +1,5 @@
-import getpass as gp
 import os
 
-# clear = lambda: os.system('clear')
 def main():
     # head = "    -     \n  /   \   \n |     |  \n  \   /   \n    -     "
     # upper_torso = "    |     \n    |     \n    |     "
@@ -10,38 +8,53 @@ def main():
     # print(upper_torso)
     # print(right_arm)
     clear()
-    word = gp.getpass("Please put in a word: ")
+    word = input("Please put in a word: ")
     blanks = _get_blanks(word)
 
     # There are 9 guesses available - one for each body part to be drawn (eventually)
     remaining_guesses = 9
     winner = False
+    wrong_letters = []
     guessed_letters = []
     message = ""
     # We know the game is over when we run out of guesses or we win the game
     #  until the game is over we'll keep guessing
     while remaining_guesses > 0 and winner is False:
-        print_scoreboard(remaining_guesses, guessed_letters, blanks, message)
+        print_scoreboard(remaining_guesses, wrong_letters, blanks, message)
         guess = input("Please enter a guess: ")
+        if len(guess) > 1:
+            if guess == word:
+                winner = True
+                clear()
+                print(word)
+                print("\n\nWinner Winner Chicken Dinner!!")
+            else:
+               remaining_guesses = remaining_guesses - 1
+               message = "\nWrong, mr tong!\n"
+        elif guess in guessed_letters:
+            message = f"\nYou've already guessed {guess}. Take another shot\n" 
         # If a single letter guess is wrong:
-        if guess not in word:
+        elif guess not in word:
             #  subtract 1 from the guesses count
             remaining_guesses = remaining_guesses - 1
-            # Add a letter to the "guessed letters"
+            # Add a letter to the "wrong letters"
+            wrong_letters.append(guess)
             guessed_letters.append(guess)
             # print a "Wrong" message
-            message = "\nWrong, baby rump kisser!\n"
+            message = "\nWrong, mr tong!\n"
 
             if remaining_guesses is 0:
                 clear()
                 print(f"You lost. The word was {word}.")
         # If a single letter guess is right:
-        if guess in word:
+        elif guess in word:
             #  don't subtract from the guesses count
             #  receive "Correct" message
             message = "\nCorrect!\n"
             #  replace the blank(s) with the guessed letter
             blanks = _fill_blanks_with_correct_letters(guess, blanks, word)
+            guessed_letters.append(guess)
+
 
             if "_" not in blanks:
                 winner = True
@@ -65,9 +78,9 @@ def _fill_blanks_with_correct_letters(guessed_letter, blanks, word):
     return blanks
 
     # Replace the blank(s) in the same position(s) as the letter in the word
-def print_scoreboard(number_of_guesses_remaining, guessed_letters, blanks, message):
+def print_scoreboard(number_of_guesses_remaining, wrong_letters, blanks, message):
     clear()
-    print(f"Number of guesses Remaining: {number_of_guesses_remaining}\n\nGuessed Letters:{guessed_letters}\n\n {str.join(' ',blanks)}\n\n {message}")
+    print(f"Number of guesses Remaining: {number_of_guesses_remaining}\n\nGuessed Letters: {str.join(' ', wrong_letters)}\n\n {str.join(' ',blanks)}\n\n {message}")
 
 def _get_blanks(word):
     blanks = []
