@@ -62,6 +62,13 @@ def main():
                 print(str.join('', blanks))
                 print("\n\nWinner Winner Chicken Dinner!!")
 
+    play_again = input("\nDo you want to play again?(y/n) ")
+    if play_again == 'y':
+        main()
+    else:
+        print("\nGoodbye!")
+
+
             
             
 def clear():
