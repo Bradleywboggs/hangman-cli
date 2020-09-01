@@ -8,7 +8,7 @@ def main():
     # print(upper_torso)
     # print(right_arm)
     clear()
-    word = input("Please put in a word: ")
+    word = input("Please put in a word: ").lower()
     blanks = _get_blanks(word)
 
     # There are 9 guesses available - one for each body part to be drawn (eventually)
@@ -21,7 +21,7 @@ def main():
     #  until the game is over we'll keep guessing
     while remaining_guesses > 0 and winner is False:
         print_scoreboard(remaining_guesses, wrong_letters, blanks, message)
-        guess = input("Please enter a guess: ")
+        guess = input("Please enter a guess: ").lower()
         if len(guess) > 1:
             if guess == word:
                 winner = True
